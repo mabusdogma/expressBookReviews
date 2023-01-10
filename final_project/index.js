@@ -4,7 +4,7 @@ const session = require('express-session');
 const users = require('./router/auth_users').users;
 const customer_routes = require('./router/auth_users.js').authenticated;
 const genl_routes = require('./router/general.js').general;
-
+const func = require('./router/general').func;
 const app = express();
 
 app.use(express.json());
@@ -37,4 +37,10 @@ const PORT =5000;
 app.use("/customer", customer_routes);
 app.use("/", genl_routes);
 
-app.listen(PORT,()=>console.log("Server is running"));
+app.listen(PORT,()=>{
+    console.log("Server is running");
+    let book = func('Things Fall Apart');
+    book.then(data => {
+        console.log(data);
+    });
+});

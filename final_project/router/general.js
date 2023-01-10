@@ -3,6 +3,8 @@ let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const public_users = express.Router();
+const axios = require('axios').default;
+const url = 'https://esraahisham7-5000.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/';
 
 
 public_users.post("/register", (req,res) => {
@@ -31,6 +33,30 @@ public_users.get('/',function (req, res) {
   //Write your code here
   return res.status(200).send(JSON.stringify(books));
 });
+
+async function get_books() {
+    let book_list = (await axios.get(url)).data;
+
+    return book_list;
+}
+
+async function get_book_by_isbn(isbn) {
+    let book = (await axios.get(url + 'isbn/'+ isbn)).data;
+
+    return book;
+}
+
+async function get_book_by_author(author) {
+    let book = (await axios.get(url + 'author/'+ author)).data;
+
+    return book;
+}
+
+async function get_book_by_title(title) {
+    let book = (await axios.get(url + 'title/'+ title)).data;
+
+    return book;
+}
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
@@ -76,3 +102,4 @@ public_users.get('/review/:isbn',function (req, res) {
 });
 
 module.exports.general = public_users;
+module.exports.func = get_book_by_title;
